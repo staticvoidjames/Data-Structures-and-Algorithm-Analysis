@@ -43,9 +43,11 @@
 |文件名|文件内容|  
 |:--:|:--:|  
 |```binary_tree_using_array.c```|二叉树,顺序存储方式实现|
+|```binary_tree_using_pointer.c```|二叉树,指针方式实现|
 
 #### 算法相关(一级目录下的文件):
 |文件名|文件内容|  
 |:--:|:--:|  
 |max_subsequence.c|最大子列和问题的n种求解方式|
 |fibonacci.c|斐波那契数列|
+|binary_search.c|二分法查找|
