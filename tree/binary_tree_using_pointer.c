@@ -45,6 +45,18 @@ void FillTree(BinTree *tree, const ElementType *data)
 	}
 }
 
+void ClearTree(BinTree *tree)
+{ 
+	if (!*tree)
+	{
+		return;
+	}
+	ClearTree(&(*tree)->left);
+	ClearTree(&(*tree)->right);
+	free(*tree);
+	*tree = NULL;//这一步必须要
+}
+
 int BinTreeEmpty(BinTree tree)
 {
 	return tree == NULL;
@@ -141,7 +153,6 @@ int main(int argc, char **argv)
 	struct BinNode node;
 
 	int status;
-	ElementType e, e1;
 	BinTree tree;
 	ElementType *data;
 
@@ -177,6 +188,9 @@ int main(int argc, char **argv)
 	printf("后序遍历二叉树:\n");
 	PostOrderTraverse(tree);
 	puts("");
+
+	ClearTree(&tree);
+	printf("清除二叉树后 is binary tree empty?\n%d\n", BinTreeEmpty(tree));
 
 	return 0;
 }
