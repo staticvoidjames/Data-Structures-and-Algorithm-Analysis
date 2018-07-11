@@ -98,6 +98,29 @@ void PreOrderTraverse(BinTree tree)
 	}
 }
 
+void PreOrderTraverseWithStack(BinTree tree)
+{
+	struct
+	{
+		BinTree data[100];
+		int top;
+	}stack = {{0},-1};
+	while(tree || stack.top != -1)
+	{
+		while(tree)
+		{
+			putchar(tree->data);
+			stack.data[++stack.top] = tree;
+			tree = tree->left;
+		}
+		if(stack.top != -1)
+		{
+			tree = stack.data[stack.top--];
+			tree = tree->right;
+		}
+	}
+}
+
 void InOrderTraverse(BinTree tree)
 {
 	if (tree)
@@ -105,6 +128,29 @@ void InOrderTraverse(BinTree tree)
 		InOrderTraverse(tree->left);
 		putchar(tree->data);
 		InOrderTraverse(tree->right);
+	}
+}
+
+void InOrderTraverseWithStack(BinTree tree)
+{
+	struct
+	{
+		BinTree data[100];
+		int top;
+	}stack = {{0},-1};
+	while(tree || stack.top != -1)
+	{
+		while(tree)
+		{
+			stack.data[++stack.top] = tree;
+			tree = tree->left;
+		}
+		if(stack.top != -1)
+		{
+			tree = stack.data[stack.top--];
+			putchar(tree->data);
+			tree = tree->right;
+		}
 	}
 }
 
@@ -118,6 +164,60 @@ void PostOrderTraverse(BinTree tree)
 	}
 }
 
+/*
+	my heart has broken
+*/
+void PostOrderTraverseWithStack(BinTree tree)
+{
+	int post = 0;
+	struct
+	{
+		BinTree data[100];
+		int visit[100];
+		int top;
+	}stack = {{0},{0},-1};
+	while(tree || stack.top != -1)
+	{
+		// 				A
+		// 		 B				C
+		// 	  D		E		F		G
+		// H			  I			  J
+		// 	 K
+		// stack.data: ABDH 遍历H的右子树 ABDHK 遍历K的右子树  ABDHK     K的右子树遍历完成   ABDHK  popup    ABDH   H的右子树遍历完成    ABDH    popup   ABD
+		// stack.visit:0000              00010              00011                        00012           0001                      0002            000
+		// print:                                                                        K                                           H
+		// 只要进入这就表示左子树已经遍历完成
+		// 为1时表示上面遍历的是当前树根的右子树
+		// 为2时表示右子树已经访问完成
+		while(tree)
+		{
+			stack.data[++stack.top] = tree;
+			tree = tree->left;
+		}
+		stack.visit[stack.top] ++;
+		// 打印所有的左右子树都遍历完成的节点
+		while(stack.visit[stack.top] == 2)
+		{
+			stack.visit[stack.top] = 0;
+			tree = stack.data[stack.top--];
+			putchar(tree->data);
+			if(stack.top != -1)
+			{
+				stack.visit[stack.top] ++;
+			}
+		}
+		if(stack.top != -1)
+		{
+			tree = stack.data[stack.top]->right;
+		}
+		else
+		{
+			tree = NULL;
+		}
+	}
+}
+
+
 /* 层序遍历二叉树 
    使用队列实现
 */
@@ -125,26 +225,31 @@ void LevelOrderTraverse(BinTree tree)
 {
 	struct
 	{
-		BinTree *data[100];
+		BinTree data[100];
 		int front;
 		int rear;
 	} queue;
 	queue.front = queue.rear = 0;
-	while (tree != NULL)
+	while (tree)
 	{
-		if (tree != NULL)
-		{
-			putchar(tree->data);
-		}
-		if (tree->left != NULL)
+		putchar(tree->data);
+		if (tree->left)
 		{
 			queue.data[queue.rear++] = tree->left;
 		}
-		if (tree->right != NULL)
+		if (tree->right)
 		{
 			queue.data[queue.rear++] = tree->right;
 		}
-		tree = queue.data[queue.front ++];
+		if(queue.front != queue.rear)
+		{
+			tree = queue.data[queue.front ++];
+		}
+		// bigfix:这一步必须要,不然没有退出条件了 
+		else
+		{
+			tree = NULL;
+		}
 	}
 }
 
@@ -180,13 +285,25 @@ int main(int argc, char **argv)
 	printf("前序遍历二叉树:\n");
 	PreOrderTraverse(tree);
 	puts("");
+	
+	printf("前序遍历二叉树(非递归方式):\n");
+	PreOrderTraverseWithStack(tree);
+	puts("");
 
 	printf("中序遍历二叉树:\n");
 	InOrderTraverse(tree);
 	puts("");
 
+	printf("中序遍历二叉树(非递归方式):\n");
+	InOrderTraverseWithStack(tree);
+	puts("");
+
 	printf("后序遍历二叉树:\n");
 	PostOrderTraverse(tree);
+	puts("");
+
+	printf("后序遍历二叉树(非递归方式):\n");
+	PostOrderTraverseWithStack(tree);
 	puts("");
 
 	ClearTree(&tree);
