@@ -309,5 +309,30 @@ int main(int argc, char **argv)
 	ClearTree(&tree);
 	printf("清除二叉树后 is binary tree empty?\n%d\n", BinTreeEmpty(tree));
 
+	// 			+
+	// 	   +		*
+	 //  a   *	  d   e
+	 //  	b c
+	i = 0;
+	data = "++a00*b00c00*d00e00";
+	InitTree(&tree);
+	FillTree(&tree, data);
+	printf("using data:\t%s\tto fill tree\n", data);
+
+	puts("运算表达式树的遍历");
+
+	printf("前序遍历(前缀表达式):\n");
+	PreOrderTraverse(tree);
+	puts("");
+
+	printf("中序遍历(中缀表达式):\n");
+	InOrderTraverse(tree);
+	puts("由于运算优先级的存在,中缀表达式可能不正确，如果要准确的中缀表达式，可以考虑在每两个叶子节点前后添加括号");	
+	puts("");
+
+	printf("后序遍历(后缀表达式):\n");
+	PostOrderTraverse(tree);
+	puts("");
+
 	return 0;
 }
