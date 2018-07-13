@@ -306,6 +306,17 @@ void PreOrderTraverse(SearchTree tree)
 	}
 }
 
+/* 中序遍历二叉树,结果将从小到大显示 */
+void InOrderTraverse(SearchTree tree)
+{
+	if (tree)
+	{
+		InOrderTraverse(tree->left);
+		putchar(tree->data);
+		InOrderTraverse(tree->right);
+	}
+}
+
 int modify(SearchTree tree,ElementType origin,ElementType target)
 {
 	if(delete(tree,origin))
@@ -325,6 +336,10 @@ int main(int argc, char const *argv[])
 	CreateSearchTree(&tree, input);
 	puts("前序遍历树:");
 	PreOrderTraverse(tree);
+	puts("");
+
+	puts("中序遍历树:");
+	InOrderTraverse(tree);
 	puts("");
 
 	find(tree, 'C');
@@ -402,6 +417,8 @@ int main(int argc, char const *argv[])
 	puts("将M改为F后:");
 	PreOrderTraverse(tree);
 	puts("");
+
+
 
 	return 0;
 }
