@@ -49,6 +49,7 @@
 #### 算法相关(一级目录下的文件):
 |文件名|文件内容|  
 |:--:|:--:|  
-|max_subsequence.c|最大子列和问题的n种求解方式|
-|fibonacci.c|斐波那契数列|
-|binary_search.c|二分法查找|
+|max_subsequence.c|最大子列和问题的n种求解方式|  
+|fibonacci.c|斐波那契数列|  
+|binary_search.c|二分法查找|  
+|gcd.c|求最大公约数的若干种方法(含辗转相除法、更相减损法及其改进)|  

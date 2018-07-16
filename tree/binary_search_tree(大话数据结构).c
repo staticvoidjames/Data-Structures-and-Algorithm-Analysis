@@ -18,7 +18,7 @@ typedef  struct BiTNode
 
 /* 递归查找二叉排序树T中是否存在key, */
 Status SearchBST(BiTree T, int key, BiTree f, BiTree *p) 
-{  
+{
 	if (!T)
 	{
 		*p = f;  
