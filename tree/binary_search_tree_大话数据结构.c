@@ -1,5 +1,5 @@
-﻿#include "stdio.h"    
-#include "stdlib.h"   
+﻿#include "stdio.h"
+#include "stdlib.h"
 
 #define OK 1
 #define ERROR 0
@@ -16,36 +16,41 @@ typedef  struct BiTNode
 } BiTNode, *BiTree;
 
 
-/* 递归查找二叉排序树T中是否存在key, */
-Status SearchBST(BiTree T, int key, BiTree f, BiTree *p) 
-{  
+/* 递归查找二叉排序树T中是否存在key,
+   f:T的父节点，初始调用值为NULL
+   p:用于返回找到的节点指针,找到了就返回对应节点，
+   没有找到的话就返回父节点(便于InsertBST函数调用)
+*/
+Status SearchBST(BiTree T, int key, BiTree f, BiTree *p)
+{
 	if (!T)
 	{
-		*p = f;  
-		return FALSE; 
+		*p = f;
+		return FALSE;
 	}
-	else if (key==T->data)
+	else if (key == T->data)
 	{
-		*p = T;  
-		return TRUE; 
+		*p = T;
+		return TRUE;
 	}
-	else if (key<T->data) 
+	else if (key < T->data)
 		return SearchBST(T->lchild, key, T, p);
-	else  
+	else
 		return SearchBST(T->rchild, key, T, p);
 }
 
 Status InsertBST(BiTree *T, int key)
 {
-	BiTree p,s;
+	BiTree p, s;
 	if (!SearchBST(*T, key, NULL, &p))
 	{
 		s = (BiTree)malloc(sizeof(BiTNode));
 		s->data = key;
 		s->lchild = s->rchild = NULL;
-		if(!p)
+		// if (!p)
+		if (!*T)
 			*T = s;
-		else if (key<p->data)
+		else if (key < p->data)
 			p->lchild = s;
 		else
 			p->rchild = s;
@@ -56,50 +61,50 @@ Status InsertBST(BiTree *T, int key)
 }
 
 /* 	删除指定节点
-	这里使用二级指针,使得程序简洁了不少,但是稍许难以理解 
+	这里使用二级指针,使得程序简洁了不少,但是稍许难以理解
 */
 Status Delete(BiTree *p)
 {
-	BiTree q,s;
-	if((*p)->rchild==NULL)
+	BiTree q, s;
+	if ((*p)->rchild == NULL)
 	{
-		q=*p; *p=(*p)->lchild; free(q);
+		q = *p; *p = (*p)->lchild; free(q);
 	}
-	else if((*p)->lchild==NULL)
+	else if ((*p)->lchild == NULL)
 	{
-		q=*p; *p=(*p)->rchild; free(q);
+		q = *p; *p = (*p)->rchild; free(q);
 	}
 	else /* 左右子树均不空 */
 	{
-		q=*p; s=(*p)->lchild;
-		while(s->rchild)
+		q = *p; s = (*p)->lchild;
+		while (s->rchild)
 		{
-			q=s;
-			s=s->rchild;
+			q = s;
+			s = s->rchild;
 		}
-		(*p)->data=s->data;
-		if(q!=*p)
-			q->rchild=s->lchild;
-		else
-			q->lchild=s->lchild;
+		(*p)->data = s->data;
+		// if (q != *p)
+		q->rchild = s->lchild;
+		// else
+		// 	q->lchild = s->lchild;
 		free(s);
 	}
 	return TRUE;
 }
 
 /* 若二叉排序树T中存在关键字等于key的数据元素时，则删除该数据元素结点, */
-Status DeleteBST(BiTree *T,int key)
+Status DeleteBST(BiTree *T, int key)
 {
-	if(!*T) /* 不存在关键字等于key的数据元素 */ 
+	if (!*T) /* 不存在关键字等于key的数据元素 */
 		return FALSE;
 	else
 	{
-		if (key==(*T)->data) /* 找到关键字等于key的数据元素 */ 
+		if (key == (*T)->data) /* 找到关键字等于key的数据元素 */
 			return Delete(T);
-		else if (key<(*T)->data)
-			return DeleteBST(&(*T)->lchild,key);
+		else if (key < (*T)->data)
+			return DeleteBST(&(*T)->lchild, key);
 		else
-			return DeleteBST(&(*T)->rchild,key);
+			return DeleteBST(&(*T)->rchild, key);
 	}
 }
 
@@ -109,7 +114,7 @@ void InOrderTraverse(BiTree tree)
 	if (tree)
 	{
 		InOrderTraverse(tree->lchild);
-		printf("%d\t",tree->data);
+		printf("%d\t", tree->data);
 		InOrderTraverse(tree->rchild);
 	}
 }
@@ -117,10 +122,10 @@ void InOrderTraverse(BiTree tree)
 int main(void)
 {
 	int i;
-	int a[10]={62,88,58,47,35,73,51,99,37,93};
-	BiTree T=NULL;
-	
-	for(i=0;i<10;i++)
+	int a[10] = {62, 88, 58, 47, 35, 73, 51, 99, 37, 93};
+	BiTree T = NULL;
+
+	for (i = 0; i < 10; i++)
 	{
 		InsertBST(&T, a[i]);
 	}
@@ -129,12 +134,12 @@ int main(void)
 	InOrderTraverse(T);
 	puts("");
 
-	DeleteBST(&T,93);
+	DeleteBST(&T, 93);
 	puts("删除数据93后,中序遍历树:");
 	InOrderTraverse(T);
 	puts("");
 
-	DeleteBST(&T,47);
+	DeleteBST(&T, 47);
 	puts("删除数据47后,中序遍历树:");
 	InOrderTraverse(T);
 	puts("");
