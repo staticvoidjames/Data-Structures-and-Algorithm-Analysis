@@ -87,59 +87,51 @@ int interpolation_search(int a[],int length,int target)
 }
 
 // 斐波那契查找
-// int fibonacci_search(int *a, int size, int x)
-// {
-//     int low,high,mid,fib_position,i;
-//     int F[] = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
-//     low = 0;
-//     high = size - 1;
-//     fib_position = 0;
-//     while(F[fib_position] < size - 1)
-//     {
-
-//     }
-// }
-
-// int Fibonacci_Search(int *a, int n, int key)
-// {
-//     int low, high, mid, i, k = 0;
-//     low = 1;  /* 定义最低下标为记录首位 */
-//     high = n; /* 定义最高下标为记录末位 */
-
-//     F[] = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
-//     while (n > F[k] - 1) /* 计算n位于斐波那契数列的位置 */
-//         k++;
-//     // k = 7	F[k] = 13
-//     for (i = n; i < F[k] - 1; i++) /* 代码可以这么写?都溢出了 */
-//         a[i] = a[n];
-//     // a[10] = a[10] = 99	a[11] = a[10] = 99
-//     while (low <= high)
-//     {
-//         mid = low + F[k - 1] - 1;
-//         if (key < a[mid])
-//         {
-//             high = mid - 1;
-//             k = k - 1;
-//         }
-//         else if (key > a[mid])
-//         {
-//             low = mid + 1;
-//             k = k - 2;
-//         }
-//         else
-//         {
-//             if (mid <= n)
-//                 return mid; /* 若相等则说明mid即为查找到的位置 */
-//             else
-//                 return n;
-//         }
-//     }
-//     return 0;
-// }
+int fibonacci_search(int *a, int size, int x)
+{
+    int low,high,mid,fib_position,i;
+    int F[] = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
+    low = 0;
+    high = size - 1;
+    fib_position = 0;
+    while(F[fib_position] < size - 1)
+    {
+        fib_position ++;
+    }
+    fib_position --;
+    for(i = F[fib_position];i < size;i ++)
+    {
+        if(a[i] == x)
+        {
+            return i;
+        }
+    }
+    // 这时候数组的长度刚好是第fib_position个斐波那契数的值了
+    while(low <= high)
+    {
+        mid = low + F[fib_position - 1];
+        if(x < a[mid])
+        {
+            high = mid - 1;
+            fib_position --;
+        }
+        else if(x > a[mid])
+        {
+            low = mid + 1;
+            fib_position = fib_position - 2;
+        }
+        else
+        {
+            return mid;
+        }
+    }
+    return -1;
+}
 
 int main(int argc, char const *argv[])
 {
     int array[12] = {1,2,6,8,10,80,81,91,106,209,346,946};
+
     printf("数组中1的下标(二分查找):%d\n",binary_search(array,12,1));
     printf("数组中2的下标(二分查找):%d\n",binary_search(array,12,2));
     printf("数组中6的下标(二分查找):%d\n",binary_search(array,12,6));
@@ -149,6 +141,7 @@ int main(int argc, char const *argv[])
     printf("数组中91的下标(二分查找):%d\n",binary_search(array,12,91));
     printf("数组中346的下标(二分查找):%d\n",binary_search(array,12,346));
     printf("数组中56456的下标(二分查找):%d\n",binary_search(array,12,56456));
+    puts("");
 
     printf("数组中1的下标(插值查找):%d\n",interpolation_search(array,12,1));
     printf("数组中2的下标(插值查找):%d\n",interpolation_search(array,12,2));
@@ -160,6 +153,18 @@ int main(int argc, char const *argv[])
     printf("数组中346的下标(插值查找):%d\n",interpolation_search(array,12,346));
     printf("数组中77的下标(插值查找):%d\n",interpolation_search(array,12,77));
     printf("数组中56456的下标(插值查找):%d\n",interpolation_search(array,12,56456));
+    puts("");
+
+    printf("数组中1的下标(斐波那契查找):%d\n",fibonacci_search(array,12,1));
+    printf("数组中2的下标(斐波那契查找):%d\n",fibonacci_search(array,12,2));
+    printf("数组中6的下标(斐波那契查找):%d\n",fibonacci_search(array,12,6));
+    printf("数组中8的下标(斐波那契查找):%d\n",fibonacci_search(array,12,8));
+    printf("数组中946的下标(斐波那契查找):%d\n",fibonacci_search(array,12,946));
+    printf("数组中209的下标(斐波那契查找):%d\n",fibonacci_search(array,12,209));
+    printf("数组中91的下标(斐波那契查找):%d\n",fibonacci_search(array,12,91));
+    printf("数组中346的下标(斐波那契查找):%d\n",fibonacci_search(array,12,346));
+    printf("数组中77的下标(斐波那契查找):%d\n",fibonacci_search(array,12,77));
+    printf("数组中56456的下标(斐波那契查找):%d\n",fibonacci_search(array,12,56456));
     
     return 0;
 }
