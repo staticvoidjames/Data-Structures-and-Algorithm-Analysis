@@ -46,6 +46,7 @@
 |```binary_tree_using_pointer.c```|二叉树,指针方式实现|
 |```binary_search_tree.c```|BST:二叉搜索(查找)树|
 |AVL_Tree.c|平衡二叉树|
+|heap.c|堆|
 
 #### 算法相关(一级目录下的文件):
 |文件名|文件内容|  
