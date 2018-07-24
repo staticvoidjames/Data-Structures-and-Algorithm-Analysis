@@ -71,13 +71,14 @@ void in_threading(BinTree tree)
 			pre->right = tree;
 		}
 		pre = tree;
+
 		in_threading(tree->right);
 	}
 }
 
 // 中序遍历二叉树,并将其中序线索化,head指向线索化的头结点
 // 其最后结果可以参考附件:中序遍历线索化.png
-int in_order_threading(BinTree *head, BinTree tree)
+void in_order_threading(BinTree *head, BinTree tree)
 {
 	// 生成头结点
 	*head = (BinTree)malloc(sizeof(struct BinNode));
@@ -91,18 +92,23 @@ int in_order_threading(BinTree *head, BinTree tree)
 	}
 	else
 	{
+		// 头结点的left指向树的根节点
 		(*head)->left = tree;
+		// 中序遍历的第一个节点的left指向头结点
 		pre = *head;
 
 		in_threading(tree);
 
+		// 中序遍历的最后一个节点的right指向头结点
 		pre->right = *head;
 		pre->rtag = Thread;
+		// 头结点的right指向中序遍历的最后一个节点
 		(*head)->right = pre;
 	}
 }
 
-// 线索二叉树的遍历相关,查看附件:线索二叉树遍历.png
+// 线索二叉树的遍历相关
+// my heart has broken
 void in_order_traverse(BinTree head)
 {
 	BinTree p;
