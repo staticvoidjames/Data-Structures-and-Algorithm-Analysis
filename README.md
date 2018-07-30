@@ -58,8 +58,9 @@
 |```bubble_sort.c ```|冒泡排序(含改进方式)|  
 |```insert_sort.c ```|插入排序|  
 |```select_sort.c```|选择排序|  
-|```shell_sort.c```|希尔排序|
-|```heap_sort.c```|堆排序|
+|```shell_sort.c```|希尔排序|  
+|```heap_sort.c```|堆排序|  
+|```merge_sort.c```|归并排序(递归和非递归方式)|  
 
 #### search 查找  
 |文件名|文件内容|  
