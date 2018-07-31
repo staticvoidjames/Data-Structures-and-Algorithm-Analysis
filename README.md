@@ -61,6 +61,7 @@
 |```shell_sort.c```|希尔排序|  
 |```heap_sort.c```|堆排序|  
 |```merge_sort.c```|归并排序(递归和非递归方式)|  
+|```quick_sort.c```|快速排序|  
 
 #### search 查找  
 |文件名|文件内容|  
