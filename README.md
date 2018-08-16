@@ -52,12 +52,12 @@
 |```threaded_binary_tree.c```|线索二叉树|  
 
 
-#### graph 图
+#### graph 图  
 **本目录中所有的图代码都是有权有向图,也就是网**  
+
 |文件名|文件内容|  
 |:--|:--|  
 |```graph_using_adjecent_matrix.c```|图,邻接矩阵实现方式|  
-
 
 #### 算法相关(目录):
 #### sort 排序  
