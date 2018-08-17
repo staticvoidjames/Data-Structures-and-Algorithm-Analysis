@@ -9,6 +9,12 @@ typedef int weight_type;
 
 typedef struct
 {
+    int vertex_index[MAX_VERTEX];
+    int front, rear;
+} Queue;
+
+typedef struct
+{
     vertex_type vertex[MAX_VERTEX]; //记录顶点信息
     // 记录边信息(边的两个顶点在顶点集合中的位置及对应的权重等)的邻接矩阵
     // 这里也可以用一个单独的指针就行,使用时将邻接矩阵传入,通过顶点个数可以算出每个边的权重的位置偏移量
@@ -151,9 +157,49 @@ void DFS_Traverse(const Graph *graph)
     {
         if (!visited[i])
         {
-            puts("");
             DFS(graph, i);
+            puts("");
         }
+    }
+}
+
+void BFS_Traverse(const Graph *graph)
+{
+    int i, j, vertex_index;
+    Queue queue;
+    queue.front = queue.rear = 0;
+
+    for (i = 0; i < graph->vertex_num; i++)
+    {
+        visited[i] = 0;
+    }
+    puts("BFS:");
+
+    for (i = 0; i < graph->vertex_num; i++)
+    {
+        if (!visited[i])
+        {
+            // 开始:访问一个元素,并将它入列
+            visited[i]++;
+            putchar(graph->vertex[i]);
+            queue.vertex_index[queue.rear++] = i; // 入列这个开始结点
+
+            while (queue.rear - queue.front)
+            {
+                // 出列一个元素,访问其未被访问过的相邻元素并将这些相邻元素入列
+                vertex_index = queue.vertex_index[queue.front++];
+                for (j = 0; j < graph->vertex_num; j++)
+                {
+                    if (graph->arc[vertex_index][j] != INFINITY && !visited[j])
+                    {
+                        putchar(graph->vertex[j]);
+                        queue.vertex_index[queue.rear++] = j;
+                        visited[j]++;
+                    }
+                }
+            }
+        }
+        puts("");
     }
 }
 
@@ -187,6 +233,7 @@ main(int argc, char const *argv[])
     print_matrix_in_arc(&graph);
 
     DFS_Traverse(&graph);
-
+    BFS_Traverse(&graph);
+    
     return 0;
 }
