@@ -57,7 +57,8 @@
 
 |文件名|文件内容|  
 |:--|:--|  
-|```graph_using_adjecent_matrix.c```|图,邻接矩阵实现方式(含DFS和BFS)|  
+|```graph_using_adjecent_matrix.c```|图,邻接矩阵实现方式(含DFS和BFS)|
+|```graph_using_adjecent_list.c```|图,邻接表实现方式(含DFS和BFS)|  
 
 #### 算法相关(目录):
 #### sort 排序  
