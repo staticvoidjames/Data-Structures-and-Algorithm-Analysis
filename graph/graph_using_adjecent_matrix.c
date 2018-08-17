@@ -116,91 +116,77 @@ void print_matrix_in_arc(const Graph *graph)
     }
 }
 
-// DFS:Depth First Search,深度优先遍历(无向图遍历方式)
-void DFS_Traverse_undirectional_graph_way(const Graph *graph,int vertex_index)
+// DFS:Depth First Search,深度优先搜索
+// 注意:这里指的是搜索,而不是遍历,这里使用这种搜索方式进行遍历(在一个图中搜索,搜索的目标是什么呢,顶点?边?搜索这些东西没必要使用DFS/BFS这些方式),进行举例
+// 其实,最简单的顶点遍历方式就是直接遍历顶点集合即可,其时间复杂度为O(v),其中v为顶点数
+// Do not fall into the trap of thinking:不要掉进思维里的陷阱
+void DFS(const Graph *graph, int start_index)
 {
     int i;
-    visited[vertex_index]++;
-    putchar(graph->vertex[vertex_index]);
+    visited[start_index]++;
+    putchar(graph->vertex[start_index]);
     for (i = 0; i < graph->vertex_num; i++)
     {
-        if (graph->arc[vertex_index][i] != INFINITY)
+        if (graph->arc[start_index][i] != INFINITY)
         {
             if (!visited[i])
             {
-                DFS_Traverse_undirectional_graph_way(graph, i);
+                DFS(graph, i);
             }
+        }
+    }
+}
+
+void DFS_Traverse(const Graph *graph)
+{
+    int i;
+    for (i = 0; i < graph->vertex_num; i++)
+    {
+        visited[i] = 0;
+    }
+    puts("DFS:");
+
+    // 对每一个未被访问的顶点进行DFS
+    for (i = 0; i < graph->vertex_num; i++)
+    {
+        if (!visited[i])
+        {
+            puts("");
+            DFS(graph, i);
         }
     }
 }
 
 main(int argc, char const *argv[])
 {
-    // 本案例中使用的图如附件:深度优先搜索.png所示,图中左图为生成的图,右图为搜索过程图示
-    // 其中本案例中为有向图,但是存在如下规律:
-    // 若存在弧<Vi,Vj>,肯定存在<Vj,Vi>(说白了就是用有向边组成了一个无向图)
-    // 此图来自《大话数据结构》关于图的深度优先搜索部分
+    // 本案例中使用的图如附件:有向图.jpg所示
     Graph graph;
     int i;
-    // 4个顶点
     vertex_type vertex[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     create_graph(&graph, vertex, 9);
+
     insert_arc(&graph, 0, 1, 6); // A->B
-    insert_arc(&graph, 1, 0, 6); // B->A
 
     insert_arc(&graph, 1, 2, 3); // B->C
-    insert_arc(&graph, 2, 1, 3);
+    insert_arc(&graph, 1, 4, 3); // B->E
+    insert_arc(&graph, 1, 5, 6); // B->F
 
-    insert_arc(&graph, 2, 3, 4); // C->D
-    insert_arc(&graph, 3, 2, 4);
+    insert_arc(&graph, 2, 4, 4); // C->E
 
-    insert_arc(&graph, 3, 4, 6); // D->E
-    insert_arc(&graph, 4, 3, 6);
+    insert_arc(&graph, 3, 2, 6); // D->C
 
-    insert_arc(&graph, 4, 5, 6); // E->F
-    insert_arc(&graph, 5, 4, 6);
+    insert_arc(&graph, 4, 1, 6); // E->B
+    insert_arc(&graph, 4, 3, 6); // E->D
 
-    insert_arc(&graph, 5, 0, 6); // F->A
-    insert_arc(&graph, 0, 5, 6);
+    insert_arc(&graph, 6, 5, 3); // G->F
 
-    insert_arc(&graph, 1, 6, 6); // B->G
-    insert_arc(&graph, 6, 1, 6);
-
-    insert_arc(&graph, 3, 6, 6); // D->G
-    insert_arc(&graph, 6, 3, 6);
-
-    insert_arc(&graph, 5, 6, 6); // F->G
-    insert_arc(&graph, 6, 5, 6);
-
-    insert_arc(&graph, 1, 8, 6); // B->I
-    insert_arc(&graph, 8, 1, 6);
-
-    insert_arc(&graph, 2, 8, 6); // C->I
-    insert_arc(&graph, 8, 2, 6);
-
-    insert_arc(&graph, 3, 8, 6); // D->I
-    insert_arc(&graph, 8, 3, 6);
-
-    insert_arc(&graph, 3, 7, 6); // D->H
-    insert_arc(&graph, 7, 3, 6);
-
-    insert_arc(&graph, 4, 7, 6); // E->H
-    insert_arc(&graph, 7, 4, 6);
-
-    insert_arc(&graph, 6, 7, 6); // G->H
-    insert_arc(&graph, 7, 6, 6);
+    insert_arc(&graph, 7, 8, 3);
 
     print_vertex(&graph);
     print_matrix_in_weight(&graph);
     print_matrix_in_arc(&graph);
 
-	puts("DFS(无向图方式):");
-    for(i = 0 ;i < graph.vertex_num;i ++)
-    {
-        visited[i] = 0;
-    }
-
-    DFS_Traverse_undirectional_graph_way(&graph,0);
+    DFS_Traverse(&graph);
 
     return 0;
 }
