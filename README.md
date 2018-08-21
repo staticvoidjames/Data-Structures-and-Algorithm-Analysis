@@ -53,12 +53,12 @@
 
 
 #### graph 图  
-**本目录中所有的图代码都是有权有向图,也就是网**  
 
 |文件名|文件内容|  
 |:--|:--|  
-|```graph_using_adjecent_matrix.c```|图,邻接矩阵实现方式(含DFS和BFS)|
+|```graph_using_adjecent_matrix.c```|图,邻接矩阵实现方式(含DFS和BFS)|  
 |```graph_using_adjecent_list.c```|图,邻接表实现方式(含DFS和BFS)|  
+|```MST_adjecent_matrix.c```|最小生成树,邻接矩阵实现方式(含Prim算法和Kruskal算法)|    
 
 #### 算法相关(目录):
 #### sort 排序  
