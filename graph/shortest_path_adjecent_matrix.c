@@ -116,7 +116,7 @@ void dijstra(Graph *graph, int start)
 
     // 计算新添加的节点对其未收录的邻接点的最短距离的影响并更新(这些邻接点会不会在路过这个新加入的顶点的情况下具有更小的路径权值),
     // 每次从未收录顶点中找到一个dist值最小的顶点,将其收录,直到没有顶点离start的距离<INFINITY,最多还需要添加 graph->vertex_num - 1次
-    while(1)
+    while (1)
     {
         // 新收录的顶点,可能导致其未收录的邻接点的最短路径权值更小,需要更新从start到这些顶点的最短路径权值
         for (j = 0; j < graph->vertex_num; j++)
@@ -127,7 +127,7 @@ void dijstra(Graph *graph, int start)
                 parent[j] = k;
             }
         }
-        
+
         min = INFINITY;
         // 找到一个未收录的最近的顶点
         for (j = 0; j < graph->vertex_num; j++)
@@ -147,13 +147,6 @@ void dijstra(Graph *graph, int start)
         collected[k] = 1; // 收录该顶点,其最短路径已经确定了
     }
 
-    printf("最短路径及长度如下:\n");
-    struct
-    {
-        int *data;
-        int top;
-    } stack;
-
     puts("parent:");
     for (i = 0; i < graph->vertex_num; ++i)
     {
@@ -166,9 +159,17 @@ void dijstra(Graph *graph, int start)
         printf("%d\t", dist[i]);
     }
     puts("");
+
+    printf("最短路径及长度如下:\n");
+    struct
+    {
+        int *data;
+        int top;
+    } stack;
+
     for (i = 0; i < graph->vertex_num; ++i)
     {
-        printf("V%c - V%c : %d \n", graph->vertex[start], graph->vertex[i], dist[i]);
+        printf("V%c -> V%c : %d \n", graph->vertex[start], graph->vertex[i], dist[i]);
         // 路径要逆序输出,这里使用栈方式实现
         stack.data = (int *)malloc(graph->vertex_num * sizeof(int));
         stack.top = -1;
@@ -187,7 +188,117 @@ void dijstra(Graph *graph, int start)
     free(stack.data);
 }
 
-main(int argc, char const *argv[])
+
+void print_state(int (*dist)[9], int (*path)[9], int num)
+{
+    int i, j;
+    printf("dist:\n");
+    for (i = 0; i < num; ++i)
+    {
+        for (j = 0; j < num; ++j)
+        {
+            if (dist[i][j] == INFINITY)
+            {
+                printf("∞\t");
+            }
+            else
+            {
+                printf("%-d\t", dist[i][j]);
+            }
+        }
+        printf("\n");
+    }
+    printf("path:\n");
+    for (i = 0; i < num; ++i)
+    {
+        for (j = 0; j < num; ++j)
+        {
+            printf("%d\t", path[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Floyd算法：参考附件:Floyd算法.png
+// 对这个算法的理解不足，且在网络上找到正确合理的解释(事实上网络上存在错误的实例且被广泛认为是事实，
+// 其中本算法中注释掉的部分就是其中最广泛的一种,如果用注释的部分代码来代替本例中的同样预期功能的代码,会发现运行出来的结果存在违例)
+void floyd(Graph *graph)
+{
+    int i, j, k;
+    int dist[graph->vertex_num][graph->vertex_num], path[graph->vertex_num][graph->vertex_num];
+
+    for (i = 0; i < graph->vertex_num; ++i)
+    {
+        for (j = 0; j < graph->vertex_num; ++j)
+        {
+            dist[i][j] = graph->arc[i][j];
+            // path[i][j] = -1;//
+            path[i][j] = j;
+        }
+    }
+
+    printf("初始化的矩阵结构");
+    print_state(dist, path, graph->vertex_num);
+
+    for (k = 0; k < graph->vertex_num; k++)
+    {
+        for (i = 0; i < graph->vertex_num; i++)
+        {
+            for (j = 0; j < graph->vertex_num; j++)
+            {
+                if (dist[i][j] > (dist[i][k] + dist[k][j]))
+                {
+                    dist[i][j] = dist[i][k] + dist[k][j];// 将当前两点间权值设为更小的一个
+                    // path[i][j] = k;
+                    path[i][j] = path[i][k];// 路径设置为经过下标为k的顶点,对于Floyd算法，这一行没搞明白
+                }
+            }
+        }
+        printf("k = %d\t处理后:\n", k);
+        print_state(dist, path, graph->vertex_num);
+    }
+
+    printf("最短路径及长度如下,floyd:\n");
+    // struct
+    // {
+    //     int *data;
+    //     int top;
+    // } stack;
+    // stack.data = (int *)malloc(graph->vertex_num * sizeof(int));
+    for (i = 0; i < graph->vertex_num - 1; ++i)
+    {
+        for (int j = i + 1; j < graph->vertex_num; ++j)
+        {
+            printf("V%c->V%c : %d \n", graph->vertex[i], graph->vertex[j], dist[i][j]);
+            k = i;
+            // 这个路径竟然还是顺序打印出来的，的确很cool
+            printf("V%c", graph->vertex[i]);
+            while (k != j)
+            {
+                k = path[k][j];
+                printf("->V%c", graph->vertex[k]);
+            }
+            puts("");
+            puts("");
+
+            // stack.top = -1;
+            // k = j;
+            // do
+            // {
+            //     stack.data[++stack.top] = k;
+            //     k = path[i][k];
+            // } while (k != i && k != -1);
+            // stack.data[++stack.top] = i;
+            // while (stack.top != -1)
+            // {
+            //     printf("V%c ", graph->vertex[stack.data[stack.top--]]);
+            // }
+        }
+    }
+    // free(stack.data);
+}
+
+int main(int argc, char const * argv[])
 {
     // 本案例中使用的图如附件:shortest_path.jpg 所示
     Graph graph;
@@ -224,7 +335,13 @@ main(int argc, char const *argv[])
     print_matrix(&graph);
 
     dijstra(&graph, 0);
-    // MST_Kruskal(&graph);
+    puts("");
+    puts("");
+    puts("");
+    puts("");
+    puts("");
+
+    floyd(&graph);
 
     return 0;
 }
