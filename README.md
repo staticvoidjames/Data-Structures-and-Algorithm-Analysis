@@ -61,6 +61,7 @@
 |```MST_adjecent_matrix.c```|最小生成树,邻接矩阵实现方式(含Prim算法和Kruskal算法)|    
 |```shortest_path_adjecent_matrix.c```|最短路径,邻接矩阵实现方式(含dijstra算法和Floyd算法)|  
 |```topo_sort_adjecent_list.c```|拓扑排序,邻接表实现方式|   
+|```critical_path_adjecent_list.c```|关键路径,邻接表实现方式|  
 
 #### 算法相关(目录):
 #### sort 排序  
